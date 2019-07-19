@@ -67,7 +67,7 @@ tape("hardcoded", (t) => {
         // throws on invalid
         var event
         try {
-            event = gabby.verifyTransfer(trBuf)
+            event = gabby.verifyTransferSync(trBuf)
         } catch (e) {
             t.error(e)
             t.end()
