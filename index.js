@@ -32,7 +32,7 @@ var convertOpts = {
 
 /* verify transfer checks the content was signed by the author of the event
 */
-exports.verifyTransfer = (trBuf) => {
+function verifyTransfer (trBuf) {
     if (typeTransfer == null) throw new Error('gabbygrove: protobf uninitialized')
 
     // decode Buffer to protobuf object
@@ -73,8 +73,18 @@ exports.verifyTransfer = (trBuf) => {
     }
 }
 
+exports.verifyTransferSync = verifyTransfer
+exports.verifyTransfer = (trBuf, cb) => {
+    try {
+        let evt = verifyTransfer(trBuf)
+        cb(null, evt)
+    } catch (error) {
+        cb(error)
+    }
+}
+
 // very bad chain maker
-exports.makeEvent = (keyPair, sequence, prev, content) => {
+function makeEvent (keyPair, sequence, prev, content) {
     if (typeEvent == null) throw new Error('gabbygrove: protobf uninitialized')
 
     let jsonBufContent = Buffer.from(JSON.stringify(content), 'binary')
@@ -124,6 +134,16 @@ exports.makeEvent = (keyPair, sequence, prev, content) => {
         event: pbEvent,
         transfer: pbTransfer, // not sure if needed
         trBytes: typeTransfer.encode(pbTransfer).finish()
+    }
+}
+exports.makeEventSync = makeEvent
+exports.makeEvent = ({keyPair, sequence, prev, content}, cb) => {
+    try {
+        let newMsg = makeEvent(keyPair, sequence, prev, content)
+        cb(null, newMsg)
+    } catch (error) {
+        console.warn(err)
+        cb(error)
     }
 }
 
