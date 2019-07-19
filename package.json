@@ -9,12 +9,15 @@
     "ssb-keys": "^7.1.7"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "set -e;node tests/hardcoded.js;node tests/makeEvent.js"
   },
   "keywords": [
     "ssb",
     "protobuf"
   ],
   "author": "cryptix@riseup.net",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "tape": "^4.11.0"
+  }
 }
